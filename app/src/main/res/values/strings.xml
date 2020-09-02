@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Guess Artist</string>
+    <string name="new_game">New Game</string>
+    <string name="game_finished">Game Finished</string>
+    <string name="high_score">High Score: %1$d / %2$d</string>
+    <string name="score_result">Your Score: %1$d / %2$d</string>
+    <!--    Preferences -->
+    <string name="preference_key">score_prefs</string>
 </resources>
