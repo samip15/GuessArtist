@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class Song {
 
-    private  int mSongId;
+    private int mSongId;
     private String mArtist;
     private String mTitle;
     private String mUri;
@@ -38,15 +38,15 @@ public class Song {
 
     // =========================== ALBUM ART FUNCTIONS  ============================
 
-    public static Bitmap getAlbumArtBySongId(Context context, int songId)
-    {
-        Song song = Song.getSongById(context,songId);
+    public static int getAlbumArtBySongId(Context context, int songId) {
+        Song song = Song.getSongById(context, songId);
         int albumArtId = context.getResources().getIdentifier(
-                song !=null ? song.getAlbumArtId() : null,
+                song != null ? song.getAlbumArtId() : null,
                 "drawable",
                 context.getPackageName()
         );
-        return BitmapFactory.decodeResource(context.getResources(),albumArtId);
+//        return BitmapFactory.decodeResource(context.getResources(),albumArtId);
+        return albumArtId;
     }
 
     // =========================== SONG FUNCTIONS  ============================
@@ -54,25 +54,20 @@ public class Song {
     /**
      * Get the details of the song by id
      */
-    public static Song getSongById(Context context, int songId)
-    {
+    public static Song getSongById(Context context, int songId) {
         JsonReader reader;
         ArrayList<Integer> songIds = new ArrayList<>();
-        try{
+        try {
             reader = readJsonFile(context);
             reader.beginArray();
-            while (reader.hasNext())
-            {
+            while (reader.hasNext()) {
                 Song currentSong = readEntry(reader);
-                if(currentSong.getSongId() == songId)
-                {
+                if (currentSong.getSongId() == songId) {
                     reader.close();
                     return currentSong;
                 }
             }
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
@@ -82,21 +77,17 @@ public class Song {
     /**
      * Retrieves the ids of all the songs
      */
-    public static ArrayList<Integer> getAllSongIds(Context context)
-    {
+    public static ArrayList<Integer> getAllSongIds(Context context) {
         JsonReader reader;
         ArrayList<Integer> songIds = new ArrayList<>();
-        try{
+        try {
             reader = readJsonFile(context);
             reader.beginArray();
-            while (reader.hasNext())
-            {
+            while (reader.hasNext()) {
                 songIds.add(readEntry(reader).getSongId());
             }
             reader.close();
-        }
-        catch (IOException ex)
-        {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
         return songIds;
@@ -107,37 +98,32 @@ public class Song {
     /**
      * Reading the json file for sample of songs
      */
-    private static JsonReader readJsonFile(Context context) throws IOException{
+    private static JsonReader readJsonFile(Context context) throws IOException {
         AssetManager assetManager = context.getAssets();
         String uri = null;
-        try{
-            for(String asset : assetManager.list(""))
-            {
-                if(asset.endsWith(".exolist.json"))
-                {
+        try {
+            for (String asset : assetManager.list("")) {
+                if (asset.endsWith(".exolist.json")) {
                     uri = "asset:///" + asset;
                 }
             }
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             Toast.makeText(context, "Loading sample list error", Toast.LENGTH_SHORT).show();
         }
 
         //taking json document
-        String userAgent = Util.getUserAgent(context,"GuessArtist");
-        DataSource dataSource = new DefaultDataSource(context,userAgent,false);
+        String userAgent = Util.getUserAgent(context, "GuessArtist");
+        DataSource dataSource = new DefaultDataSource(context, userAgent, false);
         DataSpec dataSpec = new DataSpec(Uri.parse(uri));
-        InputStream inputStream = new DataSourceInputStream(dataSource,dataSpec);
+        InputStream inputStream = new DataSourceInputStream(dataSource, dataSpec);
 
         JsonReader reader = null;
-        try{
-            reader = new JsonReader(new InputStreamReader(inputStream,"UTF-8"));
-        }
-        finally {
+        try {
+            reader = new JsonReader(new InputStreamReader(inputStream, "UTF-8"));
+        } finally {
             Util.closeQuietly(dataSource);
         }
-        return  reader;
+        return reader;
 
     }
 
@@ -145,20 +131,18 @@ public class Song {
     /**
      * Read the json objects and create sample object for each
      */
-    private static Song readEntry(JsonReader reader)
-    {
+    private static Song readEntry(JsonReader reader) {
         Integer id = -1;
         String artist = null;
         String title = null;
         String uri = null;
         String albumArtID = null;
 
-        try{
+        try {
             reader.beginObject();
-            while (reader.hasNext())
-            {
+            while (reader.hasNext()) {
                 String name = reader.nextName();
-                switch (name){
+                switch (name) {
                     case "name":
                         title = reader.nextString();
                         break;
@@ -179,14 +163,11 @@ public class Song {
                 }
             }
             reader.endObject();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return new Song(id,artist,title,uri,albumArtID);
+        return new Song(id, artist, title, uri, albumArtID);
     }
-
 
 
     // =========================== GETTER AND SETTER   ============================
