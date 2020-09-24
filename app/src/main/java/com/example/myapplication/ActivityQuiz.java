@@ -6,12 +6,14 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.media.session.MediaButtonReceiver;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -22,6 +24,9 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -44,12 +49,14 @@ public class ActivityQuiz extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "QuizActivity";
     //views
     SimpleExoPlayer mExoPlayer;
+    boolean flag = false;
     PlayerView mPlayerView;
     Button[] mButtons;
     int[] mButtonsIDs = {R.id.buttonA, R.id.buttonB, R.id.buttonC, R.id.buttonD};
-
     //delay
     private static final int CORRECT_ANSWER_DELAY = 1000;
+
+    ImageView fullscreenButton;
 
     //vars
     private ArrayList<Integer> mQuestionsSongIds;
@@ -71,10 +78,9 @@ public class ActivityQuiz extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
-
+        fullscreenButton = findViewById(R.id.exo_fullscreen_icon);
         mPlayerView = findViewById(R.id.playerView);
         createNotificationChannel();
-
         //check whether its the new game
         boolean isNewGame = !getIntent().hasExtra(REMAINING_SONGS_KEY);
 
@@ -124,7 +130,22 @@ public class ActivityQuiz extends AppCompatActivity implements View.OnClickListe
         }
         initializePlayer(Uri.parse(answerSong.getUri()));
 
+        fullscreenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (flag){
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    flag = false;
+                }else{
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    flag = true;
+                }
+            }
+        });
+
     }
+
+
 
     // ================== PLAYBACK SESSION ==============================
 
@@ -426,4 +447,7 @@ public class ActivityQuiz extends AppCompatActivity implements View.OnClickListe
             mButtons[i].setTextColor(Color.WHITE);
         }
     }
+
+
+
 }

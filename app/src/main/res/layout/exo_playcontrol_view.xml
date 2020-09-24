@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -25,6 +26,17 @@
         <ImageButton
             android:id="@+id/exo_pause"
             style="@style/ExoMediaButton.Pause" />
+
+        <ImageView
+            android:id="@+id/exo_fullscreen_icon"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_full_screen"
+            android:layout_height="40dp"
+            android:layout_width="40dp" />
+
+        
 
     </LinearLayout>
 
