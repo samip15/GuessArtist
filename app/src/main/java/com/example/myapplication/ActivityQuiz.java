@@ -146,6 +146,11 @@ public class ActivityQuiz extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    //=========================Hide AND Show Ui=====================================
+
+
+
+
 
     // ================== PLAYBACK SESSION ==============================
 
