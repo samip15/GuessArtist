@@ -130,14 +130,18 @@ public class ActivityQuiz extends AppCompatActivity implements View.OnClickListe
         }
         initializePlayer(Uri.parse(answerSong.getUri()));
 
+
         fullscreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (flag){
+                if (flag) {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    showSystemUI();
                     flag = false;
-                }else{
+                } else {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    disableButtons(mQuestionsSongIds);
+                    hideSystemUI();
                     flag = true;
                 }
             }
@@ -146,10 +150,43 @@ public class ActivityQuiz extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    //=========================Hide AND Show Ui=====================================
+    //=========================On Focused Changed=====================================
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemUI();
+        }
+    }
 
 
+    // ===================hide system ui ============================
+    private void hideSystemUI() {
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        // Set the content to appear under the system bars so that the
+                        // content doesn't resize when the system bars hide and show.
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        // Hide the nav bar and status bar
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+    }
 
+    //=====================Show System Ui =============================
+    private void showSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
 
 
     // ================== PLAYBACK SESSION ==============================
@@ -379,6 +416,15 @@ public class ActivityQuiz extends AppCompatActivity implements View.OnClickListe
         return buttons;
     }
 
+    private Button[] disableButtons(ArrayList<Integer> answerSongIds) {
+        Button[] buttons = new Button[mButtonsIDs.length];
+        for (int i = 0; i < answerSongIds.size(); i++) {
+            Button currentButton = findViewById(mButtonsIDs[i]);
+            currentButton.setVisibility(View.INVISIBLE);
+        }
+        return buttons;
+    }
+
     /**
      * When option button is pressed
      */
@@ -452,7 +498,6 @@ public class ActivityQuiz extends AppCompatActivity implements View.OnClickListe
             mButtons[i].setTextColor(Color.WHITE);
         }
     }
-
 
 
 }
