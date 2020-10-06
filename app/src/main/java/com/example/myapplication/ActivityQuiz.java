@@ -37,6 +37,7 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -137,11 +138,12 @@ public class ActivityQuiz extends AppCompatActivity implements View.OnClickListe
                 if (flag) {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     showSystemUI();
+                    enableButtons(mQuestionsSongIds);
                     flag = false;
                 } else {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                    disableButtons(mQuestionsSongIds);
                     hideSystemUI();
+                    disableButtons(mQuestionsSongIds);
                     flag = true;
                 }
             }
@@ -416,14 +418,7 @@ public class ActivityQuiz extends AppCompatActivity implements View.OnClickListe
         return buttons;
     }
 
-    private Button[] disableButtons(ArrayList<Integer> answerSongIds) {
-        Button[] buttons = new Button[mButtonsIDs.length];
-        for (int i = 0; i < answerSongIds.size(); i++) {
-            Button currentButton = findViewById(mButtonsIDs[i]);
-            currentButton.setVisibility(View.INVISIBLE);
-        }
-        return buttons;
-    }
+
 
     /**
      * When option button is pressed
@@ -498,6 +493,28 @@ public class ActivityQuiz extends AppCompatActivity implements View.OnClickListe
             mButtons[i].setTextColor(Color.WHITE);
         }
     }
+
+
+
+
+    private Button[] disableButtons(ArrayList<Integer> answerSongIds) {
+        Button[] buttons = new Button[mButtonsIDs.length];
+        for (int i = 0; i < answerSongIds.size(); i++) {
+            Button currentButton = findViewById(mButtonsIDs[i]);
+            currentButton.setVisibility(View.INVISIBLE);
+        }
+        return buttons;
+    }
+
+    private Button[] enableButtons(ArrayList<Integer> answerSongIds) {
+        Button[] buttons = new Button[mButtonsIDs.length];
+        for (int i = 0; i < answerSongIds.size(); i++) {
+            Button currentButton = findViewById(mButtonsIDs[i]);
+            currentButton.setVisibility(View.VISIBLE);
+        }
+        return buttons;
+    }
+
 
 
 }
