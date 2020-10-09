@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -137,12 +138,18 @@ public class ActivityQuiz extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 if (flag) {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                    showSystemUI();
+                    ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mPlayerView.getLayoutParams();
+                    params.width=params.MATCH_PARENT;
+                    params.height=950;
+                    mPlayerView.setLayoutParams(params);
                     enableButtons(mQuestionsSongIds);
                     flag = false;
                 } else {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                    hideSystemUI();
+                    ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mPlayerView.getLayoutParams();
+                    params.width=params.MATCH_PARENT;
+                    params.height=params.MATCH_PARENT;
+                    mPlayerView.setLayoutParams(params);
                     disableButtons(mQuestionsSongIds);
                     flag = true;
                 }
